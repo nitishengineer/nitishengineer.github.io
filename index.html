@@ -13,22 +13,23 @@
 <body>
   <header class="site-header">
     <div class="container header-content">
-      <div class="identity">
+      <!-- Top row: hamburger, name, buttons -->
+      <div class="top-row">
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navMenu">
+          ☰
+        </button>
         <h1 class="name">Nitish M</h1>
+        <div class="actions">
+          <a class="btn outline" href="Nitish_Resume.pdf" download>⬇️ Download CV</a>
+          <button class="btn outline" id="themeToggle" aria-label="Toggle theme">🌗 Theme</button>
+        </div>
+      </div>
+
+      <!-- Second row: role + location -->
+      <div class="identity-sub">
         <p class="role">Software Engineering Student</p>
         <p class="location">Salem, Tamil Nadu, India</p>
       </div>
-      <div class="actions">
-        <a class="btn outline" href="Nitish_Resume.pdf" download>⬇️ Download CV</a>
-        <button class="btn outline" id="themeToggle" aria-label="Toggle theme">🌗 Theme</button>
-      </div>
-    </div>
-
-    <!-- Hamburger (shown on mobile) -->
-    <div class="container">
-      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navMenu">
-        ☰
-      </button>
     </div>
 
     <!-- Navigation (overlay on mobile) -->
@@ -198,7 +199,7 @@
         </div>
 
         <!-- Embedded Google Form -->
-        <iframe src="YOUR_GOOGLE_FORM_EMBED_LINK"
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScIB_zZvwAbIlrKiKnN2GzOLxyblKzUo1XI76FzZZcTZPH7ag/viewform?embedded=true"
                 width="100%" height="600"
                 frameborder="0" marginheight="0" marginwidth="0"
                 title="Contact Nitish via Google Form">
