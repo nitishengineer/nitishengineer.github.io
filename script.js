@@ -24,31 +24,56 @@ hamburger?.addEventListener('click', () => {
   hamburger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
 });
 
-// Active nav link on scroll (keep in sync with CSS scroll-padding-top)
+// Links and sections
 const links = document.querySelectorAll('.nav-link');
 const sections = Array.from(links).map(l => document.querySelector(l.getAttribute('href')));
 
+// Dynamically match header height for scroll behavior and highlighting
+function updateHeaderOffset() {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+  const headerHeight = header.offsetHeight;
+
+  // Ensure native scrolling accounts for sticky header
+  root.style.scrollPaddingTop = `${headerHeight}px`;
+
+  // Ensure each section avoids being hidden under the header
+  sections.forEach(sec => {
+    if (sec) sec.style.scrollMarginTop = `${headerHeight}px`;
+  });
+
+  // Re-run highlight to reflect any changes
+  onScroll();
+}
+
+// Active nav link on scroll using measured header height
 function onScroll() {
-  // Desktop: 120px, Mobile: 80px — detect via viewport width
-  const headerOffset = window.innerWidth <= 600 ? 80 : 120;
-  const y = window.scrollY + headerOffset;
+  const header = document.querySelector('.site-header');
+  const headerHeight = header ? header.offsetHeight : 0;
+  const y = window.scrollY + headerHeight;
   let activeIndex = 0;
+
   sections.forEach((sec, i) => {
     if (!sec) return;
     if (sec.offsetTop <= y) activeIndex = i;
   });
+
   links.forEach((l, i) => l.classList.toggle('active', i === activeIndex));
 }
+
 document.addEventListener('scroll', onScroll);
-window.addEventListener('load', onScroll);
-window.addEventListener('resize', onScroll);
+window.addEventListener('load', updateHeaderOffset);
+window.addEventListener('resize', updateHeaderOffset);
 
 // Smooth navigation + immediate highlight + close mobile menu on click
 links.forEach(link => {
   link.addEventListener('click', e => {
     e.preventDefault();
     const id = link.getAttribute('href');
-    document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+    const target = document.querySelector(id);
+
+    // Native smooth scroll respects scroll-padding-top and scroll-margin-top
+    target?.scrollIntoView({ behavior: 'smooth' });
 
     // Immediately set active state
     links.forEach(l => l.classList.remove('active'));
@@ -57,7 +82,7 @@ links.forEach(link => {
     // Close overlay menu after navigating (mobile)
     if (navMenu.classList.contains('active')) {
       navMenu.classList.remove('active');
-      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger?.setAttribute('aria-expanded', 'false');
     }
   });
 });
