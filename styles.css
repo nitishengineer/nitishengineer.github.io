@@ -49,13 +49,14 @@ body {
   padding: 12px 0;
 }
 
-/* Top row: hamburger, name, buttons in one line */
+/* Top row: hamburger (mobile-only), name, buttons in one line */
 .top-row {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 .hamburger {
+  display: none; /* hidden by default (desktop) */
   font-size: 22px;
   background: var(--card);
   border: 1px solid var(--border);
@@ -68,7 +69,7 @@ body {
   margin: 0;
   font-size: 24px;
   line-height: 1.2;
-  flex: 1; /* push actions to right */
+  flex: 1; /* push actions to the right */
 }
 .actions {
   display: flex;
@@ -92,7 +93,7 @@ body {
 }
 .role, .location { margin: 0; color: var(--muted); }
 
-/* Nav */
+/* Nav (desktop default visible) */
 .nav { border-top: 1px solid var(--border); }
 .nav-list { display: flex; flex-wrap: wrap; gap: 12px; list-style: none; margin: 0; padding: 10px 0; }
 .nav-link { color: var(--muted); text-decoration: none; padding: 8px 10px; border-radius: 8px; }
@@ -153,6 +154,9 @@ iframe {
 
 /* Mobile compact header + overlay menu */
 @media (max-width: 600px) {
+  /* Show hamburger only on mobile */
+  .hamburger { display: block; }
+
   /* Smaller global offset to match shorter header */
   html { scroll-padding-top: 80px; }
 
@@ -160,16 +164,16 @@ iframe {
   .name { font-size: 20px; }
   .role, .location { font-size: 14px; }
 
-  /* Turn nav into overlay; hidden by default */
+  /* Turn nav into overlay; hidden by default on mobile */
   .nav {
     position: fixed;
-    top: 56px;           /* just below the compact top row */
+    top: 56px;           /* below compact top row */
     left: 0;
     right: 0;
     background: var(--bg);
     border-top: 1px solid var(--border);
     display: none;
-    z-index: 30;         /* above header */
+    z-index: 30;
     box-shadow: 0 8px 20px rgba(0,0,0,0.35);
   }
   .nav.active { display: block; }
@@ -181,7 +185,6 @@ iframe {
   }
 
   .cards { grid-template-columns: 1fr; }
-
   iframe { height: 500px; }
 }
 
