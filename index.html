@@ -23,7 +23,16 @@
         <button class="btn outline" id="themeToggle" aria-label="Toggle theme">🌗 Theme</button>
       </div>
     </div>
-    <nav class="nav">
+
+    <!-- Hamburger (shown on mobile) -->
+    <div class="container">
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navMenu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="navMenu">
       <div class="container">
         <ul class="nav-list">
           <li><a href="#summary" class="nav-link">Summary</a></li>
@@ -178,7 +187,7 @@
       </div>
     </section>
 
-    <!-- Contact (Google Form embedded) -->
+    <!-- Contact -->
     <section id="contact" class="section">
       <div class="container">
         <h2>Contact</h2>
@@ -188,12 +197,11 @@
           <p><strong>Location:</strong> Salem, Tamil Nadu, India</p>
         </div>
 
-        <!-- Replace the src with your Google Form embed link -->
-        <iframe
-          src="https://docs.google.com/forms/d/e/1FAIpQLScIB_zZvwAbIlrKiKnN2GzOLxyblKzUo1XI76FzZZcTZPH7ag/viewform?embedded=true"
-          width="100%" height="700"
-          frameborder="0" marginheight="0" marginwidth="0"
-          title="Contact Nitish via Google Form">
+        <!-- Embedded Google Form -->
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScIB_zZvwAbIlrKiKnN2GzOLxyblKzUo1XI76FzZZcTZPH7ag/viewform?embedded=true"
+                width="100%" height="600"
+                frameborder="0" marginheight="0" marginwidth="0"
+                title="Contact Nitish via Google Form">
           Loading…
         </iframe>
       </div>
@@ -208,5 +216,4 @@
 
   <script src="script.js"></script>
 </body>
-
 </html>
