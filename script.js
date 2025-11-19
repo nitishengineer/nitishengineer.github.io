@@ -15,7 +15,7 @@ toggleBtn?.addEventListener('click', () => {
   setTheme(next);
 });
 
-// Hamburger menu toggle (overlay on mobile)
+// Hamburger menu toggle (mobile only)
 const hamburger = document.getElementById('hamburger');
 const navMenu = document.getElementById('navMenu');
 
