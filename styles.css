@@ -21,7 +21,7 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 
-/* ✅ Fix: global scroll offset for sticky header */
+/* Global scroll offset for sticky header (match JS headerOffset) */
 html {
   scroll-padding-top: 150px;
 }
@@ -69,6 +69,20 @@ body {
 .actions {
   display: flex;
   gap: 12px;
+}
+
+/* Hamburger button */
+.hamburger {
+  display: none;
+  font-size: 26px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: var(--card);
+  margin: 6px 0 0;
 }
 
 .section { padding: 40px 0; border-bottom: 1px solid var(--border); }
@@ -123,7 +137,7 @@ iframe {
   height: 600px;
 }
 
-/* ✅ Mobile responsiveness */
+/* Mobile responsiveness */
 @media (max-width: 600px) {
   .header-content {
     flex-direction: column;
@@ -142,9 +156,24 @@ iframe {
     text-align: center;
   }
 
+  .hamburger {
+    display: block;
+  }
+
+  /* Hide nav by default on mobile; show when active */
+  .nav {
+    display: none;
+    border-top: none;
+  }
+  .nav.active {
+    display: block;
+    border-top: 1px solid var(--border);
+  }
+
   .nav-list {
     flex-direction: column;
-    gap: 6px;
+    gap: 10px;
+    padding: 12px 0;
   }
 
   .cards {
