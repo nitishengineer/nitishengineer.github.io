@@ -21,10 +21,8 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 
-/* Global scroll offset for sticky header (match JS headerOffset) */
-html {
-  scroll-padding-top: 150px;
-}
+/* Desktop/global offset for sticky header */
+html { scroll-padding-top: 120px; }
 
 body {
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -41,7 +39,7 @@ body {
   backdrop-filter: saturate(180%) blur(8px);
   background: color-mix(in oklab, var(--bg) 80%, transparent);
   border-bottom: 1px solid var(--border);
-  z-index: 10;
+  z-index: 20;
 }
 
 .header-content {
@@ -54,9 +52,7 @@ body {
 
 .nav { border-top: 1px solid var(--border); }
 .nav-list { display: flex; flex-wrap: wrap; gap: 12px; list-style: none; margin: 0; padding: 10px 0; }
-.nav-link {
-  color: var(--muted); text-decoration: none; padding: 8px 10px; border-radius: 8px;
-}
+.nav-link { color: var(--muted); text-decoration: none; padding: 8px 10px; border-radius: 8px; }
 .nav-link:hover, .nav-link.active { color: var(--text); background: var(--card); }
 
 .btn {
@@ -66,25 +62,22 @@ body {
 .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn.outline { background: transparent; }
 
-.actions {
-  display: flex;
-  gap: 12px;
-}
+.actions { display: flex; gap: 12px; }
 
 /* Hamburger button */
 .hamburger {
   display: none;
-  font-size: 26px;
-  background: none;
+  font-size: 24px;
+  background: var(--card);
   border: 1px solid var(--border);
   color: var(--text);
   cursor: pointer;
   border-radius: 8px;
   padding: 6px 10px;
-  background: var(--card);
   margin: 6px 0 0;
 }
 
+/* Sections */
 .section { padding: 40px 0; border-bottom: 1px solid var(--border); }
 .section h2 { margin: 0 0 12px; font-size: 22px; }
 .section p { margin: 0 0 12px; }
@@ -137,50 +130,58 @@ iframe {
   height: 600px;
 }
 
-/* Mobile responsiveness */
+/* Mobile compact header + overlay menu */
 @media (max-width: 600px) {
+  /* Smaller global offset to match shorter header */
+  html { scroll-padding-top: 80px; }
+
   .header-content {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 6px;
+    padding: 10px 0; /* reduced padding */
   }
 
+  .name { font-size: 22px; }
+  .role, .location { font-size: 14px; }
+
   .actions {
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
+    flex-direction: row;
+    gap: 8px;
   }
 
   .btn {
-    width: 100%;
-    text-align: center;
+    padding: 8px 10px;
   }
 
-  .hamburger {
-    display: block;
-  }
+  .hamburger { display: block; }
 
-  /* Hide nav by default on mobile; show when active */
+  /* Turn nav into overlay; hidden by default */
   .nav {
-    display: none;
-    border-top: none;
-  }
-  .nav.active {
-    display: block;
+    position: fixed;
+    top: 60px;           /* just below the compact header */
+    left: 0;
+    right: 0;
+    background: var(--bg);
     border-top: 1px solid var(--border);
+    display: none;
+    z-index: 30;         /* above header */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
   }
+  .nav.active { display: block; }
 
   .nav-list {
     flex-direction: column;
     gap: 10px;
-    padding: 12px 0;
+    padding: 12px 20px;
   }
 
-  .cards {
-    grid-template-columns: 1fr;
-  }
+  .cards { grid-template-columns: 1fr; }
 
-  iframe {
-    height: 500px;
-  }
+  iframe { height: 500px; }
+}
+
+/* Optional: hide role/location on very small screens for extra compactness */
+@media (max-width: 400px) {
+  .role, .location { display: none; }
 }
