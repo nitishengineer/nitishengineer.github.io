@@ -15,7 +15,7 @@ toggleBtn?.addEventListener('click', () => {
   setTheme(next);
 });
 
-// Hamburger menu toggle
+// Hamburger menu toggle (overlay on mobile)
 const hamburger = document.getElementById('hamburger');
 const navMenu = document.getElementById('navMenu');
 
@@ -24,12 +24,13 @@ hamburger?.addEventListener('click', () => {
   hamburger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
 });
 
-// Active nav link on scroll (match CSS scroll-padding-top)
+// Active nav link on scroll (keep in sync with CSS scroll-padding-top)
 const links = document.querySelectorAll('.nav-link');
 const sections = Array.from(links).map(l => document.querySelector(l.getAttribute('href')));
 
 function onScroll() {
-  const headerOffset = 150; // keep in sync with CSS scroll-padding-top
+  // Desktop: 120px, Mobile: 80px — detect via viewport width
+  const headerOffset = window.innerWidth <= 600 ? 80 : 120;
   const y = window.scrollY + headerOffset;
   let activeIndex = 0;
   sections.forEach((sec, i) => {
@@ -40,6 +41,7 @@ function onScroll() {
 }
 document.addEventListener('scroll', onScroll);
 window.addEventListener('load', onScroll);
+window.addEventListener('resize', onScroll);
 
 // Smooth navigation + immediate highlight + close mobile menu on click
 links.forEach(link => {
@@ -52,7 +54,7 @@ links.forEach(link => {
     links.forEach(l => l.classList.remove('active'));
     link.classList.add('active');
 
-    // Close mobile menu after navigating
+    // Close overlay menu after navigating (mobile)
     if (navMenu.classList.contains('active')) {
       navMenu.classList.remove('active');
       hamburger.setAttribute('aria-expanded', 'false');
