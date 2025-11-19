@@ -28,25 +28,59 @@ hamburger?.addEventListener('click', () => {
 const links = document.querySelectorAll('.nav-link');
 const sections = Array.from(links).map(l => document.querySelector(l.getAttribute('href')));
 
-// Dynamically match header height for scroll behavior and highlighting
+// Dynamically match header height for native scroll behavior
 function updateHeaderOffset() {
   const header = document.querySelector('.site-header');
   if (!header) return;
   const headerHeight = header.offsetHeight;
 
-  // Ensure native scrolling accounts for sticky header
+  // Native behavior: ensure sticky header doesn't cover targets
   root.style.scrollPaddingTop = `${headerHeight}px`;
-
-  // Ensure each section avoids being hidden under the header
   sections.forEach(sec => {
     if (sec) sec.style.scrollMarginTop = `${headerHeight}px`;
   });
 
-  // Re-run highlight to reflect any changes
+  // Recompute highlight after any layout change
   onScroll();
 }
 
-// Active nav link on scroll using measured header height
+// Persistent highlight control
+let manualActive = null;   // nav link element last clicked by user
+let scrollTimeout = null;  // timer to re-enable auto highlight after scroll settles
+
+// Smooth navigation + immediate, persistent highlight + close mobile menu
+links.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href');
+    const target = document.querySelector(id);
+
+    // Smooth scroll (respects scroll-padding/margin)
+    target?.scrollIntoView({ behavior: 'smooth' });
+
+    // Immediate highlight
+    links.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+
+    // Remember manual selection to prevent auto override
+    manualActive = link;
+
+    // Close overlay menu (mobile)
+    if (navMenu.classList.contains('active')) {
+      navMenu.classList.remove('active');
+      hamburger?.setAttribute('aria-expanded', 'false');
+    }
+
+    // Give smooth scroll time before auto highlight resumes
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      manualActive = null; // allow auto highlight again
+      onScroll();          // sync active state after scroll ends
+    }, 500); // tweak if needed based on scroll duration
+  });
+});
+
+// Auto highlight on scroll using measured header height
 function onScroll() {
   const header = document.querySelector('.site-header');
   const headerHeight = header ? header.offsetHeight : 0;
@@ -58,34 +92,25 @@ function onScroll() {
     if (sec.offsetTop <= y) activeIndex = i;
   });
 
-  links.forEach((l, i) => l.classList.toggle('active', i === activeIndex));
+  // Only auto-update if user hasn't just clicked
+  if (!manualActive) {
+    links.forEach((l, i) => l.classList.toggle('active', i === activeIndex));
+  }
 }
 
-document.addEventListener('scroll', onScroll);
+// Scroll handling (debounced)
+document.addEventListener('scroll', () => {
+  onScroll();
+  // If user scrolls manually, re-enable auto highlight after settle
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    manualActive = null;
+    onScroll();
+  }, 200);
+});
+
 window.addEventListener('load', updateHeaderOffset);
 window.addEventListener('resize', updateHeaderOffset);
-
-// Smooth navigation + immediate highlight + close mobile menu on click
-links.forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    const id = link.getAttribute('href');
-    const target = document.querySelector(id);
-
-    // Native smooth scroll respects scroll-padding-top and scroll-margin-top
-    target?.scrollIntoView({ behavior: 'smooth' });
-
-    // Immediately set active state
-    links.forEach(l => l.classList.remove('active'));
-    link.classList.add('active');
-
-    // Close overlay menu after navigating (mobile)
-    if (navMenu.classList.contains('active')) {
-      navMenu.classList.remove('active');
-      hamburger?.setAttribute('aria-expanded', 'false');
-    }
-  });
-});
 
 // Footer year
 document.getElementById('year').textContent = new Date().getFullYear();
